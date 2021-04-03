@@ -1,12 +1,24 @@
 var express = require('express');
 var router = express.Router();
-const {Category, Question, Answer} = require('../lib/models');
+const {Category, Question, Answer, User} = require('../lib/models');
 
+// GET /api/v1/profile
 // GET /api/v1/categories
 // POST /api/v1/categories/:categoryId/questions - Post question for particular category
 // GET /api/v1/categories/:categoryId/questions - Fetch questions for particular category
 // POST /api/v1/categories/:categoryId/questions/:questionId/answers - Post answer for particular question of category
 // GET /api/v1/categories/:categoryId/questions/:questionId/answers - Fetch answer for particular question of category
+
+router.get('/profile', async (req, res, next) => {
+  console.log('req.user is', req.user);
+  let endUser = await User.findOne({where: {email: req.user.email}});
+
+  res.json({
+    message:'Established a secure route',
+    user: endUser,
+    token: req.query.token
+  })
+});
 
 router.get('/categories', async function(req, res, next) {
     let categories = await Category.findAll({});
