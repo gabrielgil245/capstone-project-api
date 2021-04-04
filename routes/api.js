@@ -7,6 +7,7 @@ const {Category, Question, Answer, User} = require('../lib/models');
 // GET /api/v1/categories
 // POST /api/v1/categories/:categoryId/questions - Post question for particular category
 // GET /api/v1/categories/:categoryId/questions - Fetch questions for particular category
+// DELETE /api/v1/categories/:categoryId/questions/:questionId - Delete question
 // POST /api/v1/categories/:categoryId/questions/:questionId/answers - Post answer for particular question of category
 // GET /api/v1/categories/:categoryId/questions/:questionId/answers - Fetch answer for particular question of category
 
@@ -55,6 +56,17 @@ router.get('/categories/:categoryId/questions', async function(req, res, next) {
     let questions = await Question.findAll({where: {categoryId: req.params.categoryId}, include: [{model: Answer}]});
     res.json(questions);  
   }
+});
+
+router.delete('/categories/:categoryId/questions/:questionId', async function(req, res, next) {
+  console.log('req.query.userId', req.query.userId);
+  let question = req.params.questionId;
+  let user = req.query.userId;
+  if(question && user){
+    let question = await Question.destroy({where: {id: req.params.questionId}});
+    res.json(question);
+  } 
+
 });
 
 router.post('/categories/:categoryId/questions/:questionId/answers', async function(req, res, next) {
