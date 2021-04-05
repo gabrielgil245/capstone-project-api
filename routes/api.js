@@ -63,8 +63,8 @@ router.delete('/categories/:categoryId/questions/:questionId', async function(re
   let question = req.params.questionId;
   let user = req.query.userId;
   if(question && user){
+    Answer.destroy({where: {questionId: req.params.questionId}});
     let question = await Question.destroy({where: {id: req.params.questionId}});
-    await Answer.destroy({where: {questionId: req.params.questionId}});
     res.json(question);
   } 
 
